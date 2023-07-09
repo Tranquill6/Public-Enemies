@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Models\Keys;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -34,8 +36,20 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'key' => ['required', 'string', Rule::exists('keys')->where(function ($query) {
+                return $query->where('key', request()->get('key'))->where('used', 0);
+            })],
+        ],
+        [
+            'key' => 'A valid alpha key must be supplied to play!'
         ]);
 
+        //Mark alpha key as used
+        $key = Keys::find(request()->get('key'));
+        $key->used = 1;
+        $key->save();
+
+        //Create user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
