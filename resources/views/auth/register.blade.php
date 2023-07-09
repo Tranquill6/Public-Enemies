@@ -1,4 +1,9 @@
 <x-guest-layout>
+    <script type="module">
+        $(document).ready(function() {
+        });
+    </script>
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 

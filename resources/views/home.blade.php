@@ -1,33 +1,28 @@
-@section('scripts')
-<script type="module">
-    $(document).ready(function() {
+<x-home-layout>
+    <script type="module">
+        $(document).ready(function() {
 
-        //test listener for clicking a button to make sure jquery works with children via template inheritance
-        $('#testBtn').on('click', function() {
-            $(this).text('Test2');
+            //test listener for clicking a button to make sure jquery works with children via template inheritance
+            $('#testBtn').on('click', function() {
+                $(this).text('Test2');
+            });
+
         });
+    </script>
 
-    });
-</script>
-@endsection
-
-@extends('base')
-
-@section('main')
-<div class='pt-3 flex flex-col'>
-    <h1 class="text-3xl font-bold text-center text-white">Mafia World</h1>
-    <div class='flex justify-center'>
-        <span class='text-white'>Users:
-            @foreach ($test as $t)
-                {{ $t->username }}
-                @if(!$loop->last)
-                ,
-                @endif
-            @endforeach
-        </span>
+    <div class='flex flex-wrap flex-row pl-5 pr-5'>
+        <div class='w-3/5 inline-flex justify-center align-middle px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg'>
+            <div class='pt-3 flex flex-col'>
+                <h1 class="text-3xl font-bold text-center text-white">Welcome to Mafia World!</h1>
+                <div class='flex justify-center'>
+                    <span class='text-white'>
+                        Mafia World is a game set in the old times of the mafia in America! Play and rise your way to power or die trying.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='w-4/12 inline-flex align-middle justify-center'>
+            <img src='{{ asset('img/gangster.png') }}' class='max-w-lg' />
+        </div>
     </div>
-    <div class='flex justify-center'>
-        <button class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' type='button' id='testBtn'>Test</button>
-    </div>
-</div>
-@endsection
+</x-home-layout>
