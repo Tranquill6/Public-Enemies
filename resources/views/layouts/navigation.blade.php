@@ -17,6 +17,22 @@
                     </x-nav-link>
                 </div>
 
+                @can('access-admin-dashboard')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.admin')" :active="request()->routeIs('dashboard.admin')">
+                            {{ __('Admin Dashboard') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+
+                @can('access-owner-dashboard')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.owner')" :active="request()->routeIs('dashboard.owner')">
+                            {{ __('Owner Dashboard') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                         {{ __('Profile') }}
