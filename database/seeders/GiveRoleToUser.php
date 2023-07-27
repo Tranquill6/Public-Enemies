@@ -13,7 +13,7 @@ class GiveRoleToUser extends Seeder
      */
     public function run(): void
     {
-        $user = User::find(1);
-        $user->assignRole('Owner');
+        $user = User::find(3);
+        $user->assignRole('Banned');
     }
 }

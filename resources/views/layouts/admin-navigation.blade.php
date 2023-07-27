@@ -3,5 +3,9 @@
         <x-nav-link :href="route('dashboard.admin.generateAlphaKeys')" :active="request()->routeIs('dashboard.admin.generateAlphaKeys')">
             {{ __('Generate Alpha Keys') }}
         </x-nav-link>
+
+        <x-nav-link :href="route('dashboard.admin.ban')" :active="request()->routeIs('dashboard.admin.ban')">
+            {{ __('Ban User') }}
+        </x-nav-link>
     </div>
 </div>

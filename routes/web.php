@@ -26,6 +26,7 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('regi
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
+//logged in user routes
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function () {
 //Admin+ only routes
 Route::middleware('can:access-admin-dashboard')->group(function() {
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
+    Route::get('/dashboard/admin/ban', [DashboardController::class, 'ban'])->name('dashboard.admin.ban');
 });
 
 Route::middleware('can:generate-alpha-keys')->group(function() {

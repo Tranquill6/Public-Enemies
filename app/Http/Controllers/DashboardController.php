@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Keys;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -29,5 +31,11 @@ class DashboardController extends Controller
         $newKey = new Keys;
         $newKey->save();
         return Redirect::route('dashboard.admin.generateAlphaKeys')->with('status', 'key-generated');
+    }
+    
+    public function ban(): View {
+        return view('dashboard.admin.ban-user', [
+            'users' => User::with('roles')->get()
+        ]);
     }
 }
