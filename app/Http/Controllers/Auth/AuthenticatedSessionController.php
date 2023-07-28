@@ -29,6 +29,24 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        //if user is logged in, fetch them and check if they are banned
+        //see if their ban is up, then remove banned role and continue
+        //else, send them to banned page upon login
+        $user = Auth::user();
+        if($user->ban_expires_at != null) {
+            //check their banned date versus today's date
+            $bannedDate = date('Y-m-d', strtotime($user->ban_expires_at->toDateTimeString()));
+            $todayDate = date("Y-m-d");
+            if($bannedDate > $todayDate) {
+                return redirect()->intended(RouteServiceProvider::BANNED);
+            }
+
+            //remove anything ban related, since ban expired
+            $user->removeRole('Banned');
+            $user->ban_expires_at = null;
+            $user->save();
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

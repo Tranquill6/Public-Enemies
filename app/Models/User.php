@@ -43,6 +43,7 @@ class User extends Authenticatable implements AuthorizableContract
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'ban_expires_at' => 'date',
         'password' => 'hashed',
     ];
 }

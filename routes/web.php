@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BannedController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,27 +30,36 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('l
 //logged in user routes
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'bancheck'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/banned', [BannedController::class, 'view'])->name('banned');
+});
+
+Route::middleware(['auth', 'bancheck'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 //Admin+ only routes
-Route::middleware('can:access-admin-dashboard')->group(function() {
+Route::middleware(['can:access-admin-dashboard', 'auth', 'bancheck'])->group(function() {
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
-    Route::get('/dashboard/admin/ban', [DashboardController::class, 'ban'])->name('dashboard.admin.ban');
 });
 
-Route::middleware('can:generate-alpha-keys')->group(function() {
+Route::middleware(['can:ban-user', 'auth', 'bancheck'])->group(function() {
+    Route::get('/dashboard/admin/ban', [DashboardController::class, 'ban'])->name('dashboard.admin.ban');
+    Route::post('/dashboard/admin/banuser', [DashboardController::class, 'banUser'])->name('dashboard.admin.banUser');
+    Route::post('/dashboard/admin/unbanuser', [DashboardController::class, 'unbanUser'])->name('dashboard.admin.unbanUser');
+});
+
+Route::middleware(['can:generate-alpha-keys', 'auth', 'bancheck'])->group(function() {
     Route::get('/dashboard/admin/generatealphakeys', [DashboardController::class, 'alphakeys'])->name('dashboard.admin.generateAlphaKeys');
     Route::post('/dashboard/admin/generatealphakeyspost', [DashboardController::class, 'createalphakey'])->name('dashboard.admin.generateAlphaKeys.create');
 });
 
 //Owner only routes
-Route::middleware('can:access-owner-dashboard')->group(function() {
+Route::middleware(['can:access-owner-dashboard', 'auth', 'bancheck'])->group(function() {
     Route::get('/dashboard/owner', [DashboardController::class, 'owner'])->name('dashboard.owner');
 });
 
