@@ -1,12 +1,70 @@
 <x-app-layout>
     <script type='module'>
+        let users = {{ Js::from($users) }};
+
+        populateTable();
+
+        function populateTable() {
+            let tableHTML = ``;
+            for(let index in users) {
+                let user = users[index];
+                tableHTML += `
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-gray-900 dark:text-gray-100 font-medium text-base" user-id='${user['id']}' user-name='${user['username']}'>
+                        <td>${user['username']}</td>
+                        <td>${user['email']}</td>
+                        <td>${generateRolesHTML(user)}</td>
+                        <td>${checkIfUserIsBanned(user)}</td>
+                        <td>${populateUserButtons(user)}</td>
+                `;
+            }
+            $('#userTableBody').empty();
+            $('#userTableBody').append(tableHTML);
+            initFlowbite(); // because this gets generated dynamically, we need to re-call flowbite
+        }
+        function generateRolesHTML(user) {
+            let rolesHTML = ``;
+
+            for(let i = 0;i<user['roles'].length;i++) {
+                rolesHTML += `${user['roles'][i]['name']}`;
+                if(i != user['roles'].length-1) {
+                    rolesHTML += `, `;
+                }
+            }
+
+            return rolesHTML;
+        }
+        function checkIfUserIsBanned(user) {
+            for(let index in user['roles']) {
+                let role = user['roles'][index];
+                if(role['name'] == 'Banned') { return 'Yes'; }
+            }
+            return 'No';
+        }
+        function populateUserButtons(user) {
+            let isBanned = false;
+            let buttonHTML = ``;
+            for(let index in user['roles']) {
+                let role = user['roles'][index];
+                if(role['name'] == 'Banned') { isBanned = true; }
+            }
+            
+            if(isBanned) {
+                buttonHTML += `<x-basic-link id='unbanUserBtn' class='cursor-pointer unbanUserBtn' data-modal-target='unbanModal' data-modal-toggle='unbanModal'>Unban</x-basic-link>`;
+            } else {
+                buttonHTML += `<x-basic-link id='banUserBtn' class='cursor-pointer banUserBtn' data-modal-target='banModal' data-modal-toggle='banModal'>Ban</x-basic-link>`;
+            }
+
+            return buttonHTML;
+        }
         //if someeone clicks the ban btn on the user table
-        $('#userTableBody').on('click', '#banUserBtn', function() {
+        $('#userTableBody').on('click', '.banUserBtn', function() {
+            $('#userDatePicker').removeClass('border-red-700').addClass('dark:border-gray-600');
+            $('#userDatePicker').val('');
             $('#bannedUser').text($(this).parent().parent().attr('user-name'));
             $('#banUserModalBtn').attr('user-id', $(this).parent().parent().attr('user-id'));
         });
         //if someeone clicks the unban btn on the user table
-        $('#userTableBody').on('click', '#unbanUserBtn', function() {
+        $('#userTableBody').on('click', '.unbanUserBtn', function() {
             $('#unbannedUser').text($(this).parent().parent().attr('user-name'));
             $('#unbanUserModalBtn').attr('user-id', $(this).parent().parent().attr('user-id'));
         });
@@ -15,6 +73,8 @@
             let bannedUserId = $(this).attr('user-id');
             let banDate = $('#userDatePicker').val();
             let postURL = $(this).attr('post-route');
+            $('#userDatePicker').removeClass('border-red-700').addClass('dark:border-gray-600');
+            if(banDate == '' || banDate == null) { $('#userDatePicker').addClass('border-red-700').removeClass('dark:border-gray-600'); return; }
             $('#userBannedMsg').hide();
             $.ajax({
                 url: postURL,
@@ -28,7 +88,9 @@
                 },
                 success: function(result) {
                     if(result['status'] == 'user-banned') {
-                        $('#userBannedMsg').show().delay(5000).fadeOut();
+                        $('#userBannedMsg').show().delay(2500).fadeOut();
+                        users = result['data'];
+                        populateTable();
                     }
                     $('#banUserModalCancelBtn').click();
                 },
@@ -53,7 +115,9 @@
                 },
                 success: function(result) {
                     if(result['status'] == 'user-unbanned') {
-                        $('#userUnbannedMsg').show().delay(5000).fadeOut();
+                        $('#userUnbannedMsg').show().delay(2500).fadeOut();
+                        users = result['data'];
+                        populateTable();
                     }
                     $('#unbanUserModalCancelBtn').click();
                 },
@@ -92,42 +156,7 @@
                     </x-slot>
 
                     <x-slot name='body'>
-                        @foreach($users as $user)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-gray-900 dark:text-gray-100 font-medium text-base" user-id='{{ $user->id }}' user-name='{{ $user->username }}'>
-                                <td>{{ $user->username }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td> 
-                                    @foreach($user->roles as $role)
-                                        {{ !$loop->last ? $role->name.',' : $role->name }}
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach($user->roles as $role)
-                                        @if($role->name == 'Banned')
-                                            Yes
-                                            @break
-                                        @else
-                                            No
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach($user->roles as $role)
-                                        @if($role->name == 'Banned')
-                                            @php $isBanned = true; @endphp
-                                            @break
-                                        @else
-                                            @php $isBanned = false; @endphp
-                                        @endif
-                                    @endforeach
-                                    @if($isBanned)
-                                        <x-basic-link id='unbanUserBtn' class='cursor-pointer' data-modal-target='unbanModal' data-modal-toggle='unbanModal'>Unban</x-basic-link>
-                                    @else
-                                        <x-basic-link id='banUserBtn' class='cursor-pointer' data-modal-target='banModal' data-modal-toggle='banModal'>Ban</x-basic-link>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
+                        <!-- This will get populated by a JS function -->
                     </x-slot>
                 </x-table>
             </div>

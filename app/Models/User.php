@@ -46,4 +46,8 @@ class User extends Authenticatable implements AuthorizableContract
         'ban_expires_at' => 'date',
         'password' => 'hashed',
     ];
+
+    public function characters() {
+        return $this->hasMany(Character::class);
+    }
 }

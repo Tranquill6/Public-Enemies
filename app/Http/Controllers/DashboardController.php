@@ -46,7 +46,7 @@ class DashboardController extends Controller
         $fetchedUser->assignRole('Banned');
         $fetchedUser->ban_expires_at = $banData['date'];
         $fetchedUser->save();
-        return array('status' => 'user-banned');
+        return array('status' => 'user-banned', 'data' => User::with('roles')->get());
     }
 
     public function unbanUser(Request $request) {
@@ -55,6 +55,6 @@ class DashboardController extends Controller
         $fetchedUser->removeRole('Banned');
         $fetchedUser->ban_expires_at = null;
         $fetchedUser->save();
-        return array('status' => 'user-unbanned');
+        return array('status' => 'user-unbanned', 'data' => User::with('roles')->get());
     }
 }

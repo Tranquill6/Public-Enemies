@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BannedController;
+use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,18 +29,17 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('l
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
 //logged in user routes
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified', 'bancheck'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/banned', [BannedController::class, 'view'])->name('banned');
 });
 
 Route::middleware(['auth', 'bancheck'])->group(function () {
+    //profile page
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    //character page
+    Route::get('/character', [CharacterController::class, 'viewMainCharScreen'])->name('character.main');
 });
 
 //Admin+ only routes
