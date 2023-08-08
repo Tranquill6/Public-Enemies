@@ -42,8 +42,9 @@ Route::middleware(['auth', 'bancheck'])->group(function () {
     Route::get('/character', [CharacterController::class, 'viewMainCharScreen'])->name('character.main');
 });
 
-Route::middleware(['auth', 'bancheck'])->group(function () {
+Route::middleware(['auth', 'bancheck', 'createCharacterCheck'])->group(function () {
     Route::get('/character/create', [CharacterController::class, 'createCharacterScreen'])->name('character.create');
+    Route::post('/character/createCharacter', [CharacterController::class, 'createCharacter'])->name('character.createCharacter');
 });
 
 //Admin+ only routes

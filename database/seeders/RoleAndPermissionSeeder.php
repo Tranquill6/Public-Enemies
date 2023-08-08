@@ -15,37 +15,20 @@ class RoleAndPermissionSeeder extends Seeder
     public function run(): void
     {
         //create the roles
-        $bannedRole = Role::create(['name' => 'Banned']);
-        $userRole = Role::create(['name' => 'User']);
-        $adminRole = Role::create(['name' => 'Admin']);
-        $ownerRole = Role::create(['name' => 'Owner']);
+        $adminRole = Role::findByName('Admin');
+        $ownerRole = Role::findByName('Owner');
 
         //create the permissions
-        Permission::create(['name' => 'access-admin-dashboard']);
-        Permission::create(['name' => 'access-owner-dashboard']);
-        Permission::create(['name' => 'generate-alpha-keys']);
-        Permission::create(['name' => 'ban-user']);
-        Permission::create(['name' => 'change-user-role']);
-        Permission::create(['name' => 'cant-play']);
+        Permission::create(['name' => 'access-admin-cities']);
 
         //assign permissions to roles
-        $bannedRole->givePermissionTo([
-            'cant-play'
-        ]);
 
         $adminRole->givePermissionTo([
-            'access-admin-dashboard',
-            'generate-alpha-keys',
-            'ban-user',
-            'change-user-role'
+            'access-admin-cities'
         ]);
 
         $ownerRole->givePermissionTo([
-            'access-admin-dashboard',
-            'access-owner-dashboard',
-            'generate-alpha-keys',
-            'ban-user',
-            'change-user-role'
+            'access-admin-cities'
         ]);
     }
 }

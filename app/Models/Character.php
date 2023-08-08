@@ -18,10 +18,23 @@ class Character extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'name',
+        'user_id',
+        'city',
+        'rank',
+        'sex',
+        'attackMultiplier',
+        'defenseMultiplier',
+        'intellectMultiplier',
+        'stealthMultiplier',
+        'enduranceMultiplier'
     ];
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function city() {
+        return $this->belongsTo(City::class, 'city', 'name');
     }
 }

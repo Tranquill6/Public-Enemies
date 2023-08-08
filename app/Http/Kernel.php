@@ -59,6 +59,8 @@ class Kernel extends HttpKernel
         'bancheck' => \App\Http\Middleware\BanCheck::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'createCharacterCheck' => \App\Http\Middleware\CreateCharacterCheck::class,
+        'characterCheck' => \App\Http\Middleware\CharacterCheck::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
