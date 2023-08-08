@@ -42,6 +42,10 @@ Route::middleware(['auth', 'bancheck'])->group(function () {
     Route::get('/character', [CharacterController::class, 'viewMainCharScreen'])->name('character.main');
 });
 
+Route::middleware(['auth', 'bancheck'])->group(function () {
+    Route::get('/character/create', [CharacterController::class, 'createCharacterScreen'])->name('character.create');
+});
+
 //Admin+ only routes
 Route::middleware(['can:access-admin-dashboard', 'auth', 'bancheck'])->group(function() {
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
