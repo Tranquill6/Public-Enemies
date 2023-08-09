@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BannedController;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +46,11 @@ Route::middleware(['auth', 'bancheck'])->group(function () {
 Route::middleware(['auth', 'bancheck', 'createCharacterCheck'])->group(function () {
     Route::get('/character/create', [CharacterController::class, 'createCharacterScreen'])->name('character.create');
     Route::post('/character/createCharacter', [CharacterController::class, 'createCharacter'])->name('character.createCharacter');
+});
+
+//Game routes (need to be logged in + have alive char)
+Route::middleware(['auth', 'bancheck', 'characterCheck'])->group(function () {
+    Route::get('/play', [GameController::class, 'homepage'])->name('play.home');
 });
 
 //Admin+ only routes

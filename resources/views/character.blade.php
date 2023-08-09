@@ -36,7 +36,7 @@
                             <div class='inline-flex w-1/2 justify-center'><span>Status: ${aliveChar['status'] == '0' ? 'Alive' : 'Dead'}</span></div>
                         </div>
                         <div class='flex justify-center mt-4'>
-                            <x-primary-button onclick="location.href='{{ route('dashboard.admin') }}'">{{ __('Play') }}</x-primary-button>
+                            <x-primary-button onclick="location.href='{{ route('play.home') }}'">{{ __('Play') }}</x-primary-button>
                         </div>
                     `);
                 } else {
