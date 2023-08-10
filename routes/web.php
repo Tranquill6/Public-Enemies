@@ -49,8 +49,13 @@ Route::middleware(['auth', 'bancheck', 'createCharacterCheck'])->group(function 
 });
 
 //Game routes (need to be logged in + have alive char)
-Route::middleware(['auth', 'bancheck', 'characterCheck'])->group(function () {
+Route::middleware(['auth', 'bancheck', 'characterCheck', 'characterData'])->group(function () {
     Route::get('/play', [GameController::class, 'homepage'])->name('play.home');
+});
+
+//Game Ajax Routes
+Route::middleware(['auth', 'bancheck', 'characterCheck'])->group(function () {
+    Route::post('/removetimer', [GameController::class, 'removeTimer'])->name('play.removeTimer');
 });
 
 //Admin+ only routes

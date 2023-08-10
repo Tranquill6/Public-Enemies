@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'createCharacterCheck' => \App\Http\Middleware\CreateCharacterCheck::class,
         'characterCheck' => \App\Http\Middleware\CharacterCheck::class,
+        'characterData' => \App\Http\Middleware\CharacterData::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
