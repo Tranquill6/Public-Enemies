@@ -28,8 +28,8 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <x-dropdown-link :href="route('profile.edit')">
-                                    {{ __('Profile') }}
+                                <x-dropdown-link :href="route('play.crimes')" :active="request()->routeIs('play.crimes')">
+                                    {{ __('Crimes') }}
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>

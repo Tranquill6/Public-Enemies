@@ -51,6 +51,7 @@ Route::middleware(['auth', 'bancheck', 'createCharacterCheck'])->group(function 
 //Game routes (need to be logged in + have alive char)
 Route::middleware(['auth', 'bancheck', 'characterCheck', 'characterData'])->group(function () {
     Route::get('/play', [GameController::class, 'homepage'])->name('play.home');
+    Route::get('/crimes/crimes', [GameController::class, 'crimesPage'])->name('play.crimes');
 });
 
 //Game Ajax Routes

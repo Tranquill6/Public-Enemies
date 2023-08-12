@@ -32,4 +32,15 @@ class GameController extends Controller
         }
         return array('status' => true);
     }
+
+    public function crimesPage(Request $request): View {
+
+        //Fetch data from characterData middleware
+        $data = $request->get('middlewareData');
+
+        //Render the page
+        return view('game.crimes', [
+            'characterData' => $data
+        ]);
+    }
 }

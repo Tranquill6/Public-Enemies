@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
+
+.selectedTile {
+    @apply bg-gray-700 text-white
+}
