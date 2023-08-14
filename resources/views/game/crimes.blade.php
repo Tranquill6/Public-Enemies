@@ -2,8 +2,8 @@
     <script type='module'>
 
         //make sure any messages fade out after a little bit
-        $('#crimeSuccess').delay(2500).fadeOut();
-        $('#crimeFail').delay(2500).fadeOut();
+        $('#crimeSuccess').delay(4500).fadeOut();
+        $('#crimeFail').delay(4500).fadeOut();
 
         //TODO: Add crimes into the db and pull them from there instead of hard-coding them into this page
         //Add other functionality too like actually doing the crimes, etc...
@@ -44,7 +44,7 @@
                     @csrf
                     <div class='w-full inline-flex flex-row flex-wrap'>
                         @foreach ($crimes as $crime)
-                            <x-click-tile width='w-1/3' height='h-20' name='crime-{{ $crime["id"] }}' tileId='{{ $crime["id"] }}' type='crime' text='{{ $crime["name"] }}' disabled='{{ $characterData["rankId"] < $crime["rank_id_required"] ? "true" : "false" }}'></x-click-tile>
+                            <x-click-tile width='w-1/3' height='h-20' name='crime-{{ $crime["id"] }}' tileId='{{ $crime["id"] }}' type='crime' text='{{ $crime["name"] }}' disabled='{{ $characterData["rankValue"] < $crime["required_rank_value"] ? "true" : "false" }}'></x-click-tile>
                         @endforeach
                     </div>
                     <input type="text" class='hidden' id='chosenCrimeId' name='chosenCrimeId' />

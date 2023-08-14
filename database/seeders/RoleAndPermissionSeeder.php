@@ -6,6 +6,9 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use App\Models\Rank;
+use App\Models\Crime;
 
 class RoleAndPermissionSeeder extends Seeder
 {
@@ -14,21 +17,13 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        //create the roles
-        $adminRole = Role::findByName('Admin');
-        $ownerRole = Role::findByName('Owner');
+        $crimes = Crime::all();
+        $ranks = Rank::all();
 
-        //create the permissions
-        Permission::create(['name' => 'access-admin-cities']);
-
-        //assign permissions to roles
-
-        $adminRole->givePermissionTo([
-            'access-admin-cities'
-        ]);
-
-        $ownerRole->givePermissionTo([
-            'access-admin-cities'
-        ]);
+        foreach($ranks as $rank) {
+            foreach($crimes as $crime) {
+                DB::insert('INSERT INTO crimes_ranks (crime_id, rank_id, allowed) VALUES (?, ?, ?)', [$crime['id'], $rank['id'], 0]);
+            }
+        }
     }
 }

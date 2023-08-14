@@ -32,7 +32,7 @@ class CharacterData
         global $money;
         global $health;
         global $rank;
-        global $rankId;
+        global $rankValue;
 
         //Map over collection and edit the player's last active time to now and save
         $aliveChar->map(function($item, $key) {
@@ -46,7 +46,7 @@ class CharacterData
             global $money;
             global $health;
             global $rank;
-            global $rankId;
+            global $rankValue;
 
             //store values
             $timers = $item->timers()->get();
@@ -54,7 +54,7 @@ class CharacterData
             $money = $item->money;
             $health = $item->health;
             $rank = $item->rank()->get()[0]->name;
-            $rankId = $item->rank()->get()[0]->id;
+            $rankValue = $item->rank()->get()[0]->rank_value;
         });
 
         //Add any data we need to pass to controller here
@@ -64,7 +64,7 @@ class CharacterData
             'health' => $health,
             'money' => $money,
             'rank' => $rank,
-            'rankId' => $rankId
+            'rankValue' => $rankValue
         ]]);
 
         return $next($request);

@@ -69,22 +69,60 @@ class GameController extends Controller
             return Redirect::route('play.crimes')->with(['status' => 'crime-failed', 'message' => 'The crime you selected does not exist!']);
         }
 
-        //Check if crime timer is up
+        //we need to see if their rank allows them to do this crime
+        if($crimeSearch['required_rank_value'] > $aliveChar->rank()->get()[0]->rank_value) {
+            return Redirect::route('play.crimes')->with(['status' => 'crime-failed', 'message' => 'You are not allowed to do this crime!']);
+        }
+
+        //check if crime timer is up
         $timerSearch = $aliveChar->timers()->firstWhere('type', 'crime');
         if($timerSearch != null) {
             return Redirect::route('play.crimes')->with(['status' => 'crime-failed', 'message' => 'You can only commit one crime every minute!']);
         }
 
-        //calculate the stat/exp increases and add them to user's alive character -- TODO
+        //determine if crime succeeds or not -- TODO: Add chance of going to jail upon failure
+        $chanceOfFailure = rand(10,15);
+        $successRoll = rand(1,100);
+        //crime failed, add timer too
+        if($successRoll <= $chanceOfFailure) {
+            $this->addCrimeTimer($aliveChar);
+            return Redirect::route('play.crimes')->with(['status' => 'crime-failed', 'message' => 'You failed to commit the crime!']);
+        }
+
+        //calculate the stat/exp increases and add them to user's alive character
+        $charAttackMultiplier = $aliveChar->attackMultiplier;
+        $charDefenseMultiplier = $aliveChar->defenseMultiplier;
+        $charIntellectMultiplier = $aliveChar->intellectMultiplier;
+        $charStealthtMultiplier = $aliveChar->stealthMultiplier;
+        $charEnduranceMultiplier = $aliveChar->enduranceMultiplier;
+
+        $aliveChar->attack = $aliveChar->attack + ($crimeSearch['gives_attack'] * $charAttackMultiplier);
+        $aliveChar->defense = $aliveChar->defense + ($crimeSearch['gives_defense'] * $charDefenseMultiplier);
+        $aliveChar->intellect = $aliveChar->intellect + ($crimeSearch['gives_intellect'] * $charIntellectMultiplier);
+        $aliveChar->stealth = $aliveChar->stealth + ($crimeSearch['gives_stealth'] * $charStealthtMultiplier);
+        $aliveChar->endurance = $aliveChar->endurance + ($crimeSearch['gives_endurance'] * $charEnduranceMultiplier);
+        $aliveChar->exp = $aliveChar->exp + $crimeSearch['gives_exp'];
+
+        //calculate money gain
+        $moneyRoll = rand($crimeSearch['lower_money_range'], $crimeSearch['upper_money_range']);
+        $aliveChar->money = $aliveChar->money + $moneyRoll;
+        $aliveChar->save();
+
+        //setup success message for crime
+        $message = $crimeSearch['success_message'] . " $$moneyRoll!";
 
         //crime is successful, so add crime timer
-        $dateTime = now();
-        $dateTime = $dateTime->addMinutes(1);
+        $this->addCrimeTimer($aliveChar);
+        return Redirect::route('play.crimes')->with(['status' => 'crime-success', 'message' => $message]);
+    }
+
+    public function addCrimeTimer($character) {
+        $dateTime = now('America/Chicago');
+        $dateTime = $dateTime->addMinute();
         Timer::create([
-            'character_id' => $aliveChar->id,
+            'character_id' => $character->id,
             'type' => 'crime',
             'expires' => $dateTime
         ]);
-        return Redirect::route('play.crimes')->with(['status' => 'crime-success', 'message' => 'You have successfully beaten up an old bitch for her purse for $5!']);
     }
 }

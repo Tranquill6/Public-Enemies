@@ -19,6 +19,7 @@ class Rank extends Model
      */
     protected $fillable = [
         'name',
+        'rank_value',
         'required_exp',
         'required_hq',
         'requires_owning_hq',

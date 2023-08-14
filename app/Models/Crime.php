@@ -19,11 +19,11 @@ class Crime extends Model
      */
     protected $fillable = [
         'name',
-        'rank_required',
+        'required_rank_value',
         'gives_exp',
         'gives_attack',
         'gives_defense',
-        'gives_intelliect',
+        'gives_intellect',
         'gives_stealth',
         'gives_endurance',
     ];
