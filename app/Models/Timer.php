@@ -12,13 +12,20 @@ class Timer extends Model
     //Defines the table that the model uses
     protected $table = "timers";
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
      /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
+        'character_id',
         'type',
         'expires',
     ];

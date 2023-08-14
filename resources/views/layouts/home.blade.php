@@ -23,7 +23,7 @@
             <!-- Navbar for homepage -->
             <div class='inline-flex min-w-full pl-5 pr-5'>
                 <a href="/" class="pt-5">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <x-application-logo class="h-20 fill-current text-gray-500" />
                 </a>
                 <div class='inline-flex flex-row text-white text-xl w-full justify-end gap-4 pr-7'>
                     @auth

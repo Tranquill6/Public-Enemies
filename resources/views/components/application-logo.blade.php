@@ -1,1 +1,1 @@
-<img class='{{ $class }}' src='{{ asset('img/mafia-world-beta-icon.png') }}' />
+<img class='{{ $class }}' src='{{ asset('img/logo.png') }}' />

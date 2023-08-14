@@ -70,4 +70,8 @@ class Character extends Model
     public function timers() {
         return $this->hasMany(Timer::class);
     }
+
+    public function rank() {
+        return $this->belongsTo(Rank::class, 'rank', 'name');
+    }
 }

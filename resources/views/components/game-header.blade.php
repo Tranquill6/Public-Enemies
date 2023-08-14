@@ -40,10 +40,12 @@
         for(let index in timers) {
             let timer = timers[index];
             let color = '';
+            let icon = '';
             //change color depending on type of timer
             switch(timer['type']) {
                 case 'crime':
                     color = 'bg-sky-500';
+                    icon = 'fa-people-robbery';
                     break;
             }
             //decide which time to start the timer on
@@ -56,7 +58,7 @@
             let seconds = Math.floor((timeMath % (1000 * 60)) / 1000);
             seconds = seconds < 10 ? '0' + seconds : seconds;
             if(minutes > 0 || seconds > 0) {
-                timerHTML += `<div id='timer-${timer['id']}' class='headerTimer w-16 h-6 px-1 rounded-md text-right text-white ${color}'><span class='timerTime' timer-id='${timer['id']}' time-expires='${timer['expires']}'>${minutes}:${seconds}</span></div>`;
+                timerHTML += `<div id='timer-${timer['id']}' type='${timer['type']}' class='headerTimer w-16 h-6 px-1 rounded-md text-right text-white ${color}'><i class="fa-solid ${icon} float-left mt-1"></i><span class='timerTime' timer-id='${timer['id']}' time-expires='${timer['expires']}'>${minutes}:${seconds}</span></div>`;
             } else {
                 removeIds.push(timer['id']);
             }
@@ -93,6 +95,7 @@
     <!-- Bars -->
     <div id='barsContainer' class='inline-flex justify-evenly shrink items-center w-1/3 border-r-gray-500 border-r-2 px-2'>
         <div id='healthContainer'>
+            <i class="text-green-400 text-xl fa-solid fa-heart"></i>
             <div id='healthBar' class='inline-flex bg-slate-900 w-32 h-4 border-2 border-slate-600'>
                 <div id='health' class='bg-green-400 h-3' style='width: {{ $characterData['health'] }}%'></div>
             </div>
@@ -105,7 +108,7 @@
     </div>
 
     <!-- Other Info -->
-    <div id='miscContainer' class='inline-flex w-1/3 border-r-gray-500 border-r-2 px-2'></div>
+    <div id='miscContainer' class='inline-flex justify-evenly shrink items-center w-1/3 border-r-gray-500 border-r-2 px-2'></div>
 
     <!-- Timers -->
     <div id='timerContainer' class='inline-flex items-center gap-2 w-1/3 px-2'></div>
