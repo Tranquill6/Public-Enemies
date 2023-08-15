@@ -27,7 +27,7 @@
                 </a>
                 <div class='inline-flex flex-row text-white text-xl w-full justify-end gap-4 pr-7'>
                     @auth
-                        <a href='/dashboard' class='flex items-center hover:text-gray-400'>
+                        <a href='/character' class='flex items-center hover:text-gray-400'>
                             <span>Return to Game</span>
                         </a>
                     @endauth

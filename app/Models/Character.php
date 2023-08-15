@@ -19,6 +19,7 @@ class Character extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'rank_value',
         'user_id',

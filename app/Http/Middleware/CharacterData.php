@@ -11,6 +11,7 @@ use App\Models\Timer;
 use Carbon\Carbon;
 
 //This middleware fetches any data or does any actions we need to do for every game-related page that involves a playing character
+//ANY CHANGES HERE MUST BE DONE ON GAMELAYOUT.PHP
 class CharacterData
 {
     /**
@@ -27,6 +28,7 @@ class CharacterData
         $aliveChar = User::find($userId)->characters()->where('status', '0')->get();
 
         // Has to be set as global so we can change it in the map method
+        global $id;
         global $timers;
         global $location;
         global $money;
@@ -38,9 +40,9 @@ class CharacterData
         $aliveChar->map(function($item, $key) {
             $item->lastActive = Carbon::now()->toDateTimeString();
             $item->save();
-            //fetch any timers the character has
 
-             // We have to have this too, or else it wont change the variable outside of this
+            // We have to have this too, or else it wont change the variable outside of this
+            global $id;
             global $timers;
             global $location;
             global $money;
@@ -49,6 +51,7 @@ class CharacterData
             global $rankValue;
 
             //store values
+            $id = $item->id;
             $timers = $item->timers()->get();
             $location = $item->city;
             $money = $item->money;
@@ -64,7 +67,8 @@ class CharacterData
             'health' => $health,
             'money' => $money,
             'rank' => $rank,
-            'rankValue' => $rankValue
+            'rankValue' => $rankValue,
+            'id' => $id
         ]]);
 
         return $next($request);

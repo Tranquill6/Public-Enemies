@@ -10,6 +10,7 @@ use App\Models\Character;
 use App\Models\User;
 use App\Models\Crime;
 use App\Models\Timer;
+use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -116,6 +117,88 @@ class GameController extends Controller
         return Redirect::route('play.crimes')->with(['status' => 'crime-success', 'message' => $message]);
     }
 
+    public function travelPage(Request $request) {
+        //Fetch data from characterData middleware
+        $data = $request->get('middlewareData');
+
+        //Get current user
+        $user = Auth::user();
+
+        //Fetch all of the crimes a player can do
+        if($user->can('access-admin-cities')) {
+            $cities = City::all();
+        } else {
+            $cities = City::where('admin_city', '0')->get();
+        }
+
+        //Render the page
+        return view('game.travel', [
+            'characterData' => $data,
+            'cities' => $cities
+        ]);
+    }
+
+    public function travelCharacter(Request $request) {
+        $cityId = $request->travelSpots;
+        $user = Auth::user();
+        $userId = $user->id;
+        $aliveChar = User::find($userId)->characters()->where('status', '0')->get()[0];
+
+        //Make sure they chose a city
+        if($cityId == null) {
+            return Redirect::route('play.travel')->with(['status' => 'travel-failed', 'message' => 'You must choose somewhere to fly!']);
+        }
+
+        //Make sure they chose a city that exists
+        $citySearch = City::find($cityId);
+        if($citySearch == null) {
+            return Redirect::route('play.travel')->with(['status' => 'travel-failed', 'message' => 'That city does not exist!']);
+        }
+
+        //Make sure they chose a city that they have permissions for
+        if($citySearch['admin_city'] == '1' && !$user->can('access-admin-cities')) {
+            return Redirect::route('play.travel')->with(['status' => 'travel-failed', 'message' => 'You do not have permissions for that city!']);
+        }
+
+        //Make sure they aren't flying to their same city
+        if($citySearch['name'] == $aliveChar->location) {
+            return Redirect::route('play.travel')->with(['status' => 'travel-failed', 'message' => 'You cannot fly to a city you are already in!']);
+        }
+
+        //Make sure the city has at least $100 to fly
+        if($aliveChar->money < 100) {
+            return Redirect::route('play.travel')->with(['status' => 'travel-failed', 'message' => 'You do not have enough money to fly!']);
+        }
+
+        //Make sure user has their flying timer up
+        $timerSearch = $aliveChar->timers()->firstWhere('type', 'travel');
+        if($timerSearch != null) {
+            return Redirect::route('play.travel')->with(['status' => 'travel-failed', 'message' => 'You can only fly once every hour!']);
+        }
+
+        //If everything checks out, travel the user
+        $aliveChar->money = $aliveChar->money - 100;
+        $aliveChar->city = $citySearch['name'];
+        $aliveChar->save();
+        $this->addTravelTimer($aliveChar);
+        return Redirect::route('play.travel')->with(['status' => 'travel-success', 'message' => 'You have successfully flown to '. $citySearch['name'] . '!']);
+    }
+
+    public function profilePage(Request $request, string $id) {
+        //Fetch data from characterData middleware
+        $data = $request->get('middlewareData');
+
+        //Fetch data for the profile
+        $fetchedCharacterData = Character::find($id);
+
+        //Render the page
+        return view('game.profile', [
+            'characterData' => $data,
+            'profileData' => $fetchedCharacterData
+        ]);
+    }
+
+    //HELPERS
     public function addCrimeTimer($character) {
         $dateTime = now('America/Chicago');
         $dateTime = $dateTime->addMinute();
@@ -125,4 +208,15 @@ class GameController extends Controller
             'expires' => $dateTime
         ]);
     }
+
+    public function addTravelTimer($character) {
+        $dateTime = now('America/Chicago');
+        $dateTime = $dateTime->addHour();
+        Timer::create([
+            'character_id' => $character->id,
+            'type' => 'travel',
+            'expires' => $dateTime
+        ]);
+    }
+
 }

@@ -53,6 +53,9 @@ Route::middleware(['auth', 'bancheck', 'characterCheck', 'characterData'])->grou
     Route::get('/play', [GameController::class, 'homepage'])->name('play.home');
     Route::get('/crimes/crimes', [GameController::class, 'crimesPage'])->name('play.crimes');
     Route::post('/crimes/commitCrime', [GameController::class, 'commitCrime'])->name('play.commitCrime');
+    Route::get('/city/travel', [GameController::class, 'travelPage'])->name('play.travel');
+    Route::post('/city/travelCharacter', [GameController::class, 'travelCharacter'])->name('play.travelCharacter');
+    Route::get('/character/profile/{id}', [GameController::class, 'profilePage'])->name('play.profile');
 });
 
 //Game Ajax Routes

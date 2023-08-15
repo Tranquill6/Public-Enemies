@@ -47,6 +47,14 @@
                     color = 'bg-sky-500';
                     icon = 'fa-people-robbery';
                     break;
+                case 'travel':
+                    color = 'bg-green-500';
+                    icon = 'fa-plane';
+                    break;
+                case 'shoot':
+                    color = 'bg-red-500';
+                    icon = 'fa-gun';
+                    break;
             }
             //decide which time to start the timer on
             let nowTime = new Date();
@@ -58,7 +66,7 @@
             let seconds = Math.floor((timeMath % (1000 * 60)) / 1000);
             seconds = seconds < 10 ? '0' + seconds : seconds;
             if(minutes > 0 || seconds > 0) {
-                timerHTML += `<div id='timer-${timer['id']}' type='${timer['type']}' class='headerTimer w-16 h-6 px-1 rounded-md text-right text-white ${color}'><i class="fa-solid ${icon} float-left mt-1"></i><span class='timerTime' timer-id='${timer['id']}' time-expires='${timer['expires']}'>${minutes}:${seconds}</span></div>`;
+                timerHTML += `<div id='timer-${timer['id']}' type='${timer['type']}' class='headerTimer w-20 h-6 px-1 rounded-md text-right text-white ${color}'><i class="fa-solid ${icon} float-left mt-1"></i><span class='timerTime' timer-id='${timer['id']}' time-expires='${timer['expires']}'>${minutes}:${seconds}</span></div>`;
             } else {
                 removeIds.push(timer['id']);
             }
