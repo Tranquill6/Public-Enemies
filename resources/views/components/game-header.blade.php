@@ -111,7 +111,7 @@
         </div>
         <div id='moneyContainer' class='inline-flex'>
             <span class='text-white'>Money:</span>
-            <span class='text-green-400 ml-2'>${{ $characterData['money'] }}</span>
+            <span class='text-green-400 ml-2'>${{ number_format($characterData['money']) }}</span>
         </div>
     </div>
 

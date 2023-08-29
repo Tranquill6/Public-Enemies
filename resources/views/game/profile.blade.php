@@ -25,11 +25,11 @@
                 @if ($profileData != null)
                     <div class='text-white text-center text-xl w-full mb-8'>{{ __('Profile') }}</div>
                     <div class='flex flex-row flex-wrap'>
-                        <div class='w-1/2 inline-flex flex-col flex-wrap'>
+                        <div class='w-1/2 px-4 inline-flex flex-col flex-wrap'>
                             @if($profileData['sex'] == 'Male')
-                                <img src='{{ asset('img/default-male.png') }}' class='max-w-lg' />
+                                <img src='{{ asset('img/default-male.png') }}' />
                             @else
-                                <img src='{{ asset('img/default-female.png') }}' class='max-w-lg' />
+                                <img src='{{ asset('img/default-female.png') }}' />
                             @endif
                         </div>
                         <div class='w-1/2 inline-flex flex-col flex-wrap'>
@@ -40,7 +40,7 @@
                             </div>
                             <div class='inline-flex w-full items-baseline justify-around mt-4'>
                                 <div class='text-slate-400 text-sm inline-flex items-end'>Sex <div class='text-xl text-white ml-2'>{{ $profileData['sex'] }}</div></div>
-                                <div class='text-slate-400 text-sm inline-flex items-end'>Crew <div class='text-xl text-white ml-2'>{{ __('N/A') }}</div></div>
+                                <div class='text-slate-400 text-sm inline-flex items-end'>In Jail? <div class='text-xl text-white ml-2'>{{ $profileData['jailExpiresAt'] == null ? 'No' : 'Yes' }}</div></div>
                                 <div class='text-slate-400 text-sm inline-flex items-end'>Health 
                                     <div class='text-xl text-white ml-2'>
                                     @if($profileData['health'] > 75)
@@ -53,12 +53,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='inline-flex w-full items-baseline justify-around mt-4'>
+                            <div class='inline-flex w-full mt-4 ml-12'>
                                 <div class='text-slate-400 text-sm inline-flex items-end'>Last Active <div class='text-xl text-white ml-2'>{{ $profileData['lastActive'] != null ? $profileData['lastActive'] : __('N/A') }}</div></div>
-                                <div class='text-slate-400 text-sm inline-flex items-end'>In Jail? <div class='text-xl text-white ml-2'>{{ $profileData['jailExpiresAt'] == null ? 'No' : 'Yes' }}</div></div>
                             </div>
-                            <div class='w-full'>
-                                
+                            <div class='inline-flex w-full mt-4 ml-12'>
+                                <div class='text-slate-400 text-sm inline-flex items-end'>Crew <div class='text-xl text-white ml-2'>{{ __('N/A') }}</div></div>
+                            </div>
+                            <div class='flex w-full mt-auto mb-2'>
+                                <div class='text-slate-400 text-sm inline-flex items-end'>About</div>
+                            </div>
+                            <div class='flex w-full'>
+                                <div class='border-2 border-slate-300 p-4 h-44 w-full overflow-y-auto'>
+                                    <div class='text-white'>{{ __($profileData['description']) }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>

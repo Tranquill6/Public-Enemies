@@ -1,6 +1,5 @@
 <script type='module'>
-    let lastOnline = {{ Js::from($lastOnline) }};
-    console.log(lastOnline);
+
 </script>
 
 <footer class="sticky bottom-0 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">

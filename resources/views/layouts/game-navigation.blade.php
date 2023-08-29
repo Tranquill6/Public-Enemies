@@ -79,6 +79,16 @@
                         </x-dropdown>
                     </div>
 
+                    <!-- Journal -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('character.main')" :active="request()->routeIs('character.main')">
+                            {{ __('Journal') }}
+                            <div class="w-5 h-5 rounded-full inline-flex items-center justify-center bg-slate-500 text-white font-bold ml-1">
+                                0
+                            </div>
+                        </x-nav-link>
+                    </div>
+
                     <!-- Logout -->
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('logout')">

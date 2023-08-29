@@ -25,40 +25,17 @@ class CharacterData
         //Fetch player's active character
         $user = Auth::user();
         $userId = $user->id;
-        $aliveChar = User::find($userId)->characters()->where('status', '0')->get();
+        $aliveChar = User::find($userId)->characters()->where('status', '0')->get()[0];
 
-        // Has to be set as global so we can change it in the map method
-        global $id;
-        global $timers;
-        global $location;
-        global $money;
-        global $health;
-        global $rank;
-        global $rankValue;
-
-        //Map over collection and edit the player's last active time to now and save
-        $aliveChar->map(function($item, $key) {
-            $item->lastActive = Carbon::now()->toDateTimeString();
-            $item->save();
-
-            // We have to have this too, or else it wont change the variable outside of this
-            global $id;
-            global $timers;
-            global $location;
-            global $money;
-            global $health;
-            global $rank;
-            global $rankValue;
-
-            //store values
-            $id = $item->id;
-            $timers = $item->timers()->get();
-            $location = $item->city;
-            $money = $item->money;
-            $health = $item->health;
-            $rank = $item->rank()->get()[0]->name;
-            $rankValue = $item->rank()->get()[0]->rank_value;
-        });
+        //store values
+        $id = $aliveChar->id;
+        $description = $aliveChar->description;
+        $timers = $aliveChar->timers()->get();
+        $location = $aliveChar->city;
+        $money = $aliveChar->money;
+        $health = $aliveChar->health;
+        $rank = $aliveChar->rank()->get()[0]->name;
+        $rankValue = $aliveChar->rank()->get()[0]->rank_value;
 
         //Add any data we need to pass to controller here
         $request->attributes->add(['middlewareData' => [
@@ -68,7 +45,8 @@ class CharacterData
             'money' => $money,
             'rank' => $rank,
             'rankValue' => $rankValue,
-            'id' => $id
+            'id' => $id,
+            'description' => $description
         ]]);
 
         return $next($request);
