@@ -52,7 +52,7 @@
                 if(hasDeadChar) {
                     let tableHTML = `
                     <h4 class='mt-8'>Dead Characters</h4>
-                    <x-table id='deadCharTable' tableClass='' tableBodyId='deadCharTableBody'>
+                    <x-table id='deadCharTable' textSize='sm' tableClass='' tableBodyId='deadCharTableBody'>
                         <x-slot name='head'>
                             <tr>
                                 <th scope='col'>Name</th>

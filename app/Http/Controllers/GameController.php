@@ -198,6 +198,20 @@ class GameController extends Controller
         ]);
     }
 
+    public function localsPage(Request $request) {
+        //Fetch data from characterData middleware
+        $data = $request->get('middlewareData');
+
+        //Fetch all alive characters in the same city as user
+        $locals = Character::select('id', 'name', 'rank', 'lastActive', 'jailExpiresAt')->where(['city' => $data['location'], 'status' => '0'])->get();
+
+        //Render the page
+        return view('game.locals', [
+            'characterData' => $data,
+            'localData' => $locals
+        ]);
+    }
+
     //HELPERS
     public function addCrimeTimer($character) {
         $dateTime = now('America/Chicago');

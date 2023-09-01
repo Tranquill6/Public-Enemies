@@ -53,6 +53,10 @@
                                 <x-dropdown-link :href="route('play.travel')" :active="request()->routeIs('play.travel')">
                                     {{ __('Travel') }}
                                 </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('play.locals')" :active="request()->routeIs('play.locals')">
+                                    {{ __('Locals') }}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                     </div>

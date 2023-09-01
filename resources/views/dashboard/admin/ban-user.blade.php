@@ -144,7 +144,7 @@
                 <div class='text-gray-900 dark:text-gray-100'>
                     {{ __('Welcome to the ban page!') }}
                 </div>
-                <x-table id='userTable' tableClass='mt-5' tableBodyId='userTableBody'>
+                <x-table id='userTable' textSize='sm' tableClass='mt-5' tableBodyId='userTableBody'>
                     <x-slot name='head'>
                         <tr>
                             <th scope="col" class="px-6 py-3">User</th>
